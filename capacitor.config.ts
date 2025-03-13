@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'pomodorov2',
+  appId: 'com.poongaloo.pomodoro',
+  appName: 'Pomodoro',
   webDir: 'www'
 };
 

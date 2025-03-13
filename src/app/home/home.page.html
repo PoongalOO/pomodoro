@@ -1,20 +1,54 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Pomodoro v2</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-input #taskInput placeholder="Nom de la tâche"></ion-input>
+    <ion-button (click)="addTask(taskInput?.value?.toString() || ''); taskInput.value = ''">
+      Ajouter
+    </ion-button>
+  </ion-item>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-list>
+    <ion-reorder-group (ionItemReorder)="reorderTasks($event)" disabled="false">
+      <div *ngFor="let task of tasks">
+        <ion-progress-bar [value]="getProgress(task) / 100"></ion-progress-bar>
+        <ion-item >
+          
+          <ion-label>
+            <h2>{{ task.name }}</h2>
+            <p>{{ formatTime(task.timeLeft) }}</p>
+          </ion-label>
+
+          <ion-button size="default" color="success" (click)="startTimer(task)" *ngIf="!task.isRunning"><ion-icon name="play-circle-outline"></ion-icon></ion-button>
+          <ion-button size="default" color="warning" (click)="pauseTimer(task)" *ngIf="task.isRunning"><ion-icon name="pause-circle-outline"></ion-icon></ion-button>
+          <ion-button size="default" color="danger" (click)="resetTimer(task)"><ion-icon name="refresh-outline"></ion-icon></ion-button>
+          <ion-button size="default" color="medium" (click)="removeTask(task.id)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+      </div>
+    </ion-reorder-group>
+  </ion-list>
+  
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Progression</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #donutChart></canvas>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Statistiques</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #barChart></canvas>
+      <canvas #pieChart></canvas>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
